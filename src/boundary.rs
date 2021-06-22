@@ -23,4 +23,8 @@ impl Boundary {
                    transform,
                    g);
     }
+
+    pub fn coords(&self) -> [f64; 4] { 
+        self.line_coords 
+    }
 }

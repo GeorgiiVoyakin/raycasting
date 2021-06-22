@@ -10,9 +10,11 @@ use piston::input::{MouseCursorEvent, RenderArgs, RenderEvent, UpdateArgs, Updat
 use piston::window::WindowSettings;
 
 use crate::boundary::Boundary;
+use crate::point::Point;
 use crate::ray::Ray;
 
 mod boundary;
+mod point;
 mod ray;
 
 pub struct App {
@@ -26,7 +28,7 @@ impl App {
 
         const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 0.0];
 
-        let boundary: Boundary = Boundary::new([10.0, 10.0, 200.0, 500.0]);
+        let boundary: Boundary = Boundary::new([500.0, 20.0, 500.0, 400.0]);
         let boundary2: Boundary = Boundary::new([0.0, 300.0, 800.0, 300.0]);
         let ray = Ray::new(self.mouse_pos[0], self.mouse_pos[1]);
 
@@ -34,6 +36,13 @@ impl App {
             boundary.draw(&c.draw_state, c.transform, gl);
             boundary2.draw(&c.draw_state, c.transform, gl);
             ray.draw(&c.draw_state, c.transform, gl);
+
+            let point: Option<Point> = ray.cast(boundary);
+
+            match point {
+                Some(p) => p.draw(&c.draw_state, c.transform, gl),
+                None => println!("No intersection"),
+            }
 
             // Clear the screen.
             clear(BLACK, gl);
