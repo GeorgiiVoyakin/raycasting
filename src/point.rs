@@ -1,6 +1,7 @@
 use graphics::math::Matrix2d;
 use graphics::{DrawState, Ellipse, Graphics};
 
+#[derive(Copy, Clone)]
 pub struct Point {
     x: f64,
     y: f64,

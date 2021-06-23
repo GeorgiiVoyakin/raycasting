@@ -54,19 +54,32 @@ impl App {
 
             for r in rays.iter() {
                 r.draw(&c.draw_state, c.transform, gl);
+                let mut min = f64::INFINITY;
+                let mut closest: Option<Point> = None;
 
                 for b in boundaries.iter() {
                     let point: Option<Point> = r.cast(b);
 
                     match point {
-                        Some(p) => Line::new([0.5, 0.5, 0.5, 1.0], 1.0).draw(
-                            [r.x(), r.y(), p.x(), p.y()],
-                            &c.draw_state,
-                            c.transform,
-                            gl,
-                        ),
+                        Some(p) => {
+                            let dist = distance(r, &p);
+                            if  dist < min {
+                                closest = point;
+                                min = dist;
+                            }
+                        },
                         None => {}
                     }
+                }
+
+                match closest {
+                    Some(p) => Line::new([0.5, 0.5, 0.5, 1.0], 1.0).draw(
+                        [r.x(), r.y(), p.x(), p.y()],
+                        &c.draw_state,
+                        c.transform,
+                        gl,
+                    ),
+                    None => {},
                 }
             }
 
@@ -113,4 +126,9 @@ fn main() {
             app.update(&args);
         }
     }
+}
+
+/// Calculate distance between ray and point
+fn distance(ray: &Ray, point: &Point) -> f64 {
+    ((ray.x() - point.x()).powf(2.0) + (ray.y() - point.y()).powf(2.0)).sqrt()
 }
