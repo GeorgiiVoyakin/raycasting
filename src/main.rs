@@ -17,6 +17,9 @@ mod boundary;
 mod point;
 mod ray;
 
+const WIDTH: f64 = 800.0;
+const HEIGHT: f64 = 600.0;
+
 pub struct App {
     gl: GlGraphics, // OpenGL drawing backend.
     mouse_pos: [f64; 2],
@@ -30,6 +33,12 @@ impl App {
 
         let boundary: Boundary = Boundary::new([500.0, 20.0, 500.0, 400.0]);
         let boundary2: Boundary = Boundary::new([0.0, 300.0, 800.0, 300.0]);
+        let boundary3: Boundary = Boundary::new([200.0, 200.0, 200.0, 500.0]);
+
+        let top_boundary: Boundary = Boundary::new([0.0, 0.0, WIDTH, 0.0]);
+        let bottom_boundary: Boundary = Boundary::new([0.0, HEIGHT, WIDTH, HEIGHT]);
+        let left_boundary: Boundary = Boundary::new([0.0, 0.0, 0.0, HEIGHT]);
+        let right_boundary: Boundary = Boundary::new([WIDTH, 0.0, WIDTH, HEIGHT]);
         let mut boundaries: Vec<Boundary> = Vec::new();
         let mut rays: Vec<Ray> = Vec::new();
 
@@ -44,8 +53,14 @@ impl App {
             ));
         }
 
+        boundaries.push(top_boundary);
+        boundaries.push(bottom_boundary);
+        boundaries.push(left_boundary);
+        boundaries.push(right_boundary);
+
         boundaries.push(boundary);
         boundaries.push(boundary2);
+        boundaries.push(boundary3);
 
         self.gl.draw(args.viewport(), |c, gl| {
             for b in boundaries.iter() {
@@ -53,7 +68,6 @@ impl App {
             }
 
             for r in rays.iter() {
-                r.draw(&c.draw_state, c.transform, gl);
                 let mut min = f64::INFINITY;
                 let mut closest: Option<Point> = None;
 
@@ -100,7 +114,7 @@ fn main() {
     let opengl = OpenGL::V3_2;
 
     // Create an Glutin window.
-    let mut window: Window = WindowSettings::new("raycasting", [800, 600])
+    let mut window: Window = WindowSettings::new("raycasting", [WIDTH, HEIGHT])
         .graphics_api(opengl)
         .exit_on_esc(true)
         .build()

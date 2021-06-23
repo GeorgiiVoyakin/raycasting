@@ -8,7 +8,7 @@ pub struct Ray {
     x: f64,
     y: f64,
     dir: (f64, f64),
-    line: graphics::Line,
+    _line: graphics::Line,
 }
 
 impl Ray {
@@ -19,13 +19,13 @@ impl Ray {
             x,
             y,
             dir,
-            line: graphics::Line::new(WHITE, 1.0),
+            _line: graphics::Line::new(WHITE, 1.0),
         }
     }
 
-    pub fn draw<G: Graphics>(&self, draw_state: &DrawState, transform: Matrix2d, g: &mut G) {
+    pub fn _draw<G: Graphics>(&self, draw_state: &DrawState, transform: Matrix2d, g: &mut G) {
         Line::draw(
-            &self.line,
+            &self._line,
             [
                 self.x,
                 self.y,
