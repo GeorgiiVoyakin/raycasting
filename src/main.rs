@@ -117,6 +117,7 @@ fn main() {
     let mut window: Window = WindowSettings::new("raycasting", [WIDTH, HEIGHT])
         .graphics_api(opengl)
         .exit_on_esc(true)
+        .resizable(false)
         .build()
         .unwrap();
 
