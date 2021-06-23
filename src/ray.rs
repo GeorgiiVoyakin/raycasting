@@ -12,13 +12,13 @@ pub struct Ray {
 }
 
 impl Ray {
-    pub fn new(x: f64, y: f64) -> Ray {
+    pub fn new(x: f64, y: f64, dir: (f64, f64)) -> Ray {
         const WHITE: [f32; 4] = [1.0, 1.0, 1.0, 1.0];
 
         Ray {
             x,
             y,
-            dir: (1.0, 0.0),
+            dir,
             line: graphics::Line::new(WHITE, 1.0),
         }
     }
@@ -38,7 +38,7 @@ impl Ray {
         );
     }
 
-    pub fn cast(&self, boundary: Boundary) -> Option<Point> {
+    pub fn cast(&self, boundary: &Boundary) -> Option<Point> {
         let x1 = self.x;
         let y1 = self.y;
         let x2 = self.x + self.dir.0 * 10.0;
@@ -56,12 +56,20 @@ impl Ray {
         let t = ((x1 - x3) * (y3 - y4) - (y1 - y3) * (x3 - x4)) / denominator;
         let u = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denominator;
 
-        if t > 0.0 && t < 1.0 && u > 0.0 && u < 1.0 {
+        if t > 0.0 && u > 0.0 && u < 1.0 {
             let point_x = x1 + t * (x2 - x1);
             let point_y = y1 + t * (y2 - y1);
             Some(Point::new(point_x, point_y, 10.0))
         } else {
             None
         }
+    }
+
+    pub fn x(&self) -> f64 {
+        self.x
+    }
+
+    pub fn y(&self) -> f64 {
+        self.y
     }
 }

@@ -30,18 +30,44 @@ impl App {
 
         let boundary: Boundary = Boundary::new([500.0, 20.0, 500.0, 400.0]);
         let boundary2: Boundary = Boundary::new([0.0, 300.0, 800.0, 300.0]);
-        let ray = Ray::new(self.mouse_pos[0], self.mouse_pos[1]);
+        let mut boundaries: Vec<Boundary> = Vec::new();
+        let mut rays: Vec<Ray> = Vec::new();
+
+        for i in 0..360 {
+            rays.push(Ray::new(
+                self.mouse_pos[0],
+                self.mouse_pos[1],
+                (
+                    (i as f64 * (std::f64::consts::PI / 180 as f64)).cos(),
+                    (i as f64 * (std::f64::consts::PI / 180 as f64)).sin(),
+                ),
+            ));
+        }
+
+        boundaries.push(boundary);
+        boundaries.push(boundary2);
 
         self.gl.draw(args.viewport(), |c, gl| {
-            boundary.draw(&c.draw_state, c.transform, gl);
-            boundary2.draw(&c.draw_state, c.transform, gl);
-            ray.draw(&c.draw_state, c.transform, gl);
+            for b in boundaries.iter() {
+                b.draw(&c.draw_state, c.transform, gl);
+            }
 
-            let point: Option<Point> = ray.cast(boundary);
+            for r in rays.iter() {
+                r.draw(&c.draw_state, c.transform, gl);
 
-            match point {
-                Some(p) => p.draw(&c.draw_state, c.transform, gl),
-                None => println!("No intersection"),
+                for b in boundaries.iter() {
+                    let point: Option<Point> = r.cast(b);
+
+                    match point {
+                        Some(p) => Line::new([0.5, 0.5, 0.5, 1.0], 1.0).draw(
+                            [r.x(), r.y(), p.x(), p.y()],
+                            &c.draw_state,
+                            c.transform,
+                            gl,
+                        ),
+                        None => {}
+                    }
+                }
             }
 
             // Clear the screen.
