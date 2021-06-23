@@ -2,5 +2,6 @@
 2d raycasting
 
 ## Examples
-![example 1](images/example1.png)
-![example 2](images/example2.png)
+<img src="images/example1.png" alt="example 1" width="400"/>
+
+<img src="images/example2.png" alt="example 2" width="400"/>
