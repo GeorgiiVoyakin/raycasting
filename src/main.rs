@@ -20,6 +20,8 @@ mod ray;
 const WIDTH: f64 = 800.0;
 const HEIGHT: f64 = 600.0;
 
+const sphereRadius: f64 = 70.0;
+
 pub struct App {
     gl: GlGraphics, // OpenGL drawing backend.
     mouse_pos: [f64; 2],
@@ -31,14 +33,10 @@ impl App {
 
         const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 0.0];
 
-        let boundary: Boundary = Boundary::new([500.0, 20.0, 500.0, 400.0]);
-        let boundary2: Boundary = Boundary::new([0.0, 300.0, 800.0, 300.0]);
-        let boundary3: Boundary = Boundary::new([200.0, 200.0, 200.0, 500.0]);
+        // let boundary: Boundary = Boundary::new([500.0, 20.0, 500.0, 400.0]);
+        // let boundary2: Boundary = Boundary::new([0.0, 300.0, 800.0, 300.0]);
+        // let boundary3: Boundary = Boundary::new([200.0, 200.0, 200.0, 500.0]);
 
-        let top_boundary: Boundary = Boundary::new([0.0, 0.0, WIDTH, 0.0]);
-        let bottom_boundary: Boundary = Boundary::new([0.0, HEIGHT, WIDTH, HEIGHT]);
-        let left_boundary: Boundary = Boundary::new([0.0, 0.0, 0.0, HEIGHT]);
-        let right_boundary: Boundary = Boundary::new([WIDTH, 0.0, WIDTH, HEIGHT]);
         let mut boundaries: Vec<Boundary> = Vec::new();
         let mut rays: Vec<Ray> = Vec::new();
 
@@ -52,11 +50,6 @@ impl App {
                 ),
             ));
         }
-
-        boundaries.push(top_boundary);
-        boundaries.push(bottom_boundary);
-        boundaries.push(left_boundary);
-        boundaries.push(right_boundary);
 
         boundaries.push(boundary);
         boundaries.push(boundary2);
@@ -77,23 +70,45 @@ impl App {
                     match point {
                         Some(p) => {
                             let dist = distance(r, &p);
-                            if  dist < min {
+                            if dist < min {
                                 closest = point;
                                 min = dist;
                             }
-                        },
+                        }
                         None => {}
                     }
                 }
 
                 match closest {
-                    Some(p) => Line::new([0.5, 0.5, 0.5, 1.0], 1.0).draw(
-                        [r.x(), r.y(), p.x(), p.y()],
-                        &c.draw_state,
-                        c.transform,
-                        gl,
-                    ),
-                    None => {},
+                    Some(mut p) => {
+                        let radiusPoint = Point::new(
+                            r.x() + r.dir().0 * sphereRadius,
+                            r.y() + r.dir().1 * sphereRadius,
+                            10.0,
+                        );
+                        if (distance(r, &p) > distance(r, &radiusPoint)) {
+                            p = radiusPoint;
+                        }
+                        Line::new([0.5, 0.5, 0.5, 1.0], 1.0).draw(
+                            [r.x(), r.y(), p.x(), p.y()],
+                            &c.draw_state,
+                            c.transform,
+                            gl,
+                        )
+                    }
+                    None => {
+                        let p = Point::new(
+                            r.x() + r.dir().0 * sphereRadius,
+                            r.y() + r.dir().1 * sphereRadius,
+                            10.0,
+                        );
+                        Line::new([0.5, 0.5, 0.5, 1.0], 1.0).draw(
+                            [r.x(), r.y(), p.x(), p.y()],
+                            &c.draw_state,
+                            c.transform,
+                            gl,
+                        )
+                    }
                 }
             }
 

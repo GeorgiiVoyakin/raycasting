@@ -72,4 +72,8 @@ impl Ray {
     pub fn y(&self) -> f64 {
         self.y
     }
+
+    pub fn dir(&self) -> (f64, f64) {
+        self.dir
+    }
 }

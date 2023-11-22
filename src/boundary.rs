@@ -1,5 +1,5 @@
-use graphics::{Graphics, DrawState, Line};
 use graphics::math::Matrix2d;
+use graphics::{DrawState, Graphics, Line};
 
 pub struct Boundary {
     line_coords: [f64; 4],
@@ -17,14 +17,10 @@ impl Boundary {
     }
 
     pub fn draw<G: Graphics>(&self, draw_state: &DrawState, transform: Matrix2d, g: &mut G) {
-        Line::draw(&self.line,
-                   self.line_coords,
-                   draw_state,
-                   transform,
-                   g);
+        Line::draw(&self.line, self.line_coords, draw_state, transform, g);
     }
 
-    pub fn coords(&self) -> [f64; 4] { 
-        self.line_coords 
+    pub fn coords(&self) -> [f64; 4] {
+        self.line_coords
     }
 }

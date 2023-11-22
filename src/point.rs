@@ -24,13 +24,7 @@ impl Point {
     }
 
     pub fn _draw<G: Graphics>(&self, draw_state: &DrawState, transform: Matrix2d, g: &mut G) {
-        Ellipse::draw(
-            &self._ellipse, 
-            self._rect, 
-            draw_state, 
-            transform, 
-            g
-        );
+        Ellipse::draw(&self._ellipse, self._rect, draw_state, transform, g);
     }
 
     pub fn x(&self) -> f64 {
