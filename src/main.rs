@@ -33,9 +33,9 @@ impl App {
 
         const BLACK: [f32; 4] = [0.0, 0.0, 0.0, 0.0];
 
-        // let boundary: Boundary = Boundary::new([500.0, 20.0, 500.0, 400.0]);
-        // let boundary2: Boundary = Boundary::new([0.0, 300.0, 800.0, 300.0]);
-        // let boundary3: Boundary = Boundary::new([200.0, 200.0, 200.0, 500.0]);
+        let boundary: Boundary = Boundary::new([500.0, 20.0, 500.0, 400.0]);
+        let boundary2: Boundary = Boundary::new([0.0, 300.0, 800.0, 300.0]);
+        let boundary3: Boundary = Boundary::new([200.0, 200.0, 200.0, 500.0]);
 
         let mut boundaries: Vec<Boundary> = Vec::new();
         let mut rays: Vec<Ray> = Vec::new();
